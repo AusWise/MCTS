@@ -11,7 +11,8 @@ class Card:
 
 
 class Minion(Card):
-    def __init__(self, health):
+    def __init__(self, name, health, text=None):
+        super(Minion, self).__init__(name=name, text=text)
         self.cost = None
         self.attack = None
         self.health = HP(health, min_value=1)
@@ -19,7 +20,8 @@ class Minion(Card):
 
 
 class Ability(Card):
-    def __init__(self):
+    def __init__(self, name, text=None):
+        super(Ability, self).__init__(name=name, text=text)
         self.cost = None
         self.action = None
 
