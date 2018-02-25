@@ -1,0 +1,3 @@
+
+class NoPointsError(ValueError):
+    pass
