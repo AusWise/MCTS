@@ -1,5 +1,5 @@
 import unittest
-from game.resource import Resource, NoPointsError
+from game.resource import Resource, HP, Mana, NoPointsError
 
 
 class TestResource(unittest.TestCase):
@@ -9,6 +9,14 @@ class TestResource(unittest.TestCase):
     def test_hasPointsLeft_returnsTrue(self):
         self.assertTrue(self.res.has_points_left())
 
+    def test_getResourceValue_returnCorrectIntegerValue(self):
+        self.assertEquals(self.res.value, 10)
+
+
+class TestHPResource(unittest.TestCase):
+    def setUp(self):
+        self.res = HP(10)
+
     def test_subtractAllPoints_hasNoPointsLeft(self):
         self.res.subtract(10)
         self.assertFalse(self.res.has_points_left())
@@ -17,5 +25,12 @@ class TestResource(unittest.TestCase):
         with self.assertRaises(NoPointsError):
             self.res.subtract(14)
 
-    def test_getResourceValue_returnCorrectIntegerValue(self):
-        self.assertEquals(self.res.value, 10)
+
+class TestManaResource(unittest.TestCase):
+    def setUp(self):
+        self.res = Mana(10)
+
+    def test_subtractMorePointsThanResourceHas_valueSetToZero(self):
+        self.res.subtract(100)
+        self.assertFalse(self.res.has_points_left())
+        self.assertEquals(self.res.value, 0)

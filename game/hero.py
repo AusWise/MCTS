@@ -1,8 +1,8 @@
-DEFAULT_INIT_HEALTH = 20
+from resource import HP, Mana
 
 class Hero:
-    def __init__(self, deck, health=DEFAULT_INIT_HEALTH):
-        self.mana = None
+    def __init__(self, deck, health=20, mana=10):
+        self.mana = HP(health)
+        self.health = Mana(mana)
         self.deck = deck
-        self.health = health
         self.hand = set()
