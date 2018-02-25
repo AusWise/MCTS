@@ -1,4 +1,4 @@
-from resource import HP, Mana
+from game.resource import HP, Mana
 
 class Hero:
     def __init__(self, deck, health=20, mana=10):

@@ -3,20 +3,18 @@ MAX_MINIONS_ON_BOARD = 7
 MINIONS_IN_DECK = 7
 ABILITIES_IN_DECK = 3
 
+from copy import deepcopy
 import numpy as np
 
-from game import Hero
-from game.cards import CardFactory
-from copy import deepcopy
-from game import Board
+from game.hero import Hero
+from game.card import CardFactory
+from game.board import Board
 
 def generateDeck():
     cardFactory = CardFactory()
     cards = cardFactory()
     deck = deepcopy(cards) + deepcopy(cards)
     deck = np.random.permutation(deck)
-
-
 
     return deck
 

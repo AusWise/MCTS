@@ -1,4 +1,10 @@
-from card import Card
+class Card:
+    def __init__(self, name, text=None):
+        self.name = name
+        self.text = text
+
+    def __str__(self):
+        return self.name
 
 class CardFactory:
     def __call__(self, *args, **kwargs):
@@ -9,4 +15,3 @@ class CardFactory:
                  Card("Card 9"), Card("Card 10")]
 
         return cards
-
