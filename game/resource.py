@@ -1,4 +1,4 @@
-from src.exception import NoPointsError
+from game.exception import NoPointsError
 
 
 class Resource:

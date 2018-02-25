@@ -1,6 +1,5 @@
 import unittest
-from src.resource import Resource
-from src.exception import NoPointsError
+from game.resource import Resource, NoPointsError
 
 
 class TestResource(unittest.TestCase):
