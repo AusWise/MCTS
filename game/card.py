@@ -1,3 +1,6 @@
+from game.resource import HP
+
+
 class Card:
     def __init__(self, name, text=None):
         self.name = name
@@ -5,6 +8,21 @@ class Card:
 
     def __str__(self):
         return self.name
+
+
+class Minion(Card):
+    def __init__(self, health):
+        self.cost = None
+        self.attack = None
+        self.health = HP(health, min_value=1)
+        self.action = None
+
+
+class Ability(Card):
+    def __init__(self):
+        self.cost = None
+        self.action = None
+
 
 class CardFactory:
     def __call__(self, *args, **kwargs):
