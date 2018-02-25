@@ -32,3 +32,6 @@ class Mana(Resource):
             super(Mana, self)._subtract(points=points)
         except NoPointsError:
             pass
+
+    def restore(self):
+        self._value = self._max_value

@@ -34,3 +34,8 @@ class TestManaResource(unittest.TestCase):
         self.res.subtract(100)
         self.assertFalse(self.res.has_points_left())
         self.assertEquals(self.res.value, 0)
+
+    def test_restore_allManaPointsRestored(self):
+        self.res._value = 0
+        self.res.restore()
+        self.assertEqual(self.res.value, 10)
