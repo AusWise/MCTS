@@ -18,8 +18,8 @@ def generateDeck():
 
     return deck
 
-hero1 = Hero(deck=generateDeck())
-hero2 = Hero(deck=generateDeck())
+hero1 = Hero(name='Hero1', deck=generateDeck())
+hero2 = Hero(name='Hero2', deck=generateDeck())
 
 board = Board(hero1, hero2)
 
