@@ -5,10 +5,10 @@ ABILITIES_IN_DECK = 3
 
 import numpy as np
 
-from mcts import Hero
-from mcts.cards import CardFactory
+from game import Hero
+from game.cards import CardFactory
 from copy import deepcopy
-from mcts import Board
+from game import Board
 
 def generateDeck():
     cardFactory = CardFactory()
