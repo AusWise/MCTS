@@ -1,4 +1,4 @@
-from Card import Card
+from card import Card
 
 class CardFactory:
     def __call__(self, *args, **kwargs):
