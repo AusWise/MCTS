@@ -53,6 +53,19 @@ class MinionVsMinion(Move):
 
         return state
 
+class MinionVsHero(Move):
+    def __init__(self, minion, hero):
+        self.minion = minion
+        self.hero = hero
+
+    def __call__(self, state):
+        self.hero.health -= self.minion.attack
+
+        if self.hero.health <= 0:
+            return None
+
+        state.moves = state.generateMoves()
+        return state
 
 class Finish(Move):
     def __init__(self):
@@ -141,6 +154,8 @@ class StatePrinter:
             self.stateString += 'Play card ' + move.card.name
         elif isinstance(move, MinionVsMinion):
             self.stateString += move.minion1.name + ' vs. ' + move.minion2.name
+        elif isinstance(move, MinionVsHero):
+            self.stateString += move.minion.name + ' vs. ' + move.hero.name
         elif isinstance(move, Finish):
             self.stateString += 'Finish Turn'
 
@@ -207,6 +222,9 @@ class State:
             for enemyMinion in self.board[enemy].minions:
                 moves.append(MinionVsMinion(heroMinion, enemyMinion))
 
+        for minion in self.board[hero].minions:
+            moves.append(MinionVsHero(minion, hero))
+
         moves.append(Finish())
         return moves
 
@@ -222,20 +240,9 @@ while(True):
     move = state.moves[moveNo]
     state = move(state)
 
-    # state.generateMoves()
+    if state is None:
+        break
+
     statePrinter.printState(state)
 
     print(statePrinter.stateString)
-
-# turnNo = 1
-# turnOwn = hero2
-#
-# turnOwn.mana = min(turnNo, MAX_MANA)
-#
-# turnOwn.hand.add(turnOwn.deck.pop())
-# turnOwn.hand.add(turnOwn.deck.pop())
-# turnOwn.hand.add(turnOwn.deck.pop())
-# turnOwn.hand.add(turnOwn.deck.pop())
-#
-# print(printStateStrategy.printState())
-
