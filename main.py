@@ -9,14 +9,14 @@ from mcts import Hero
 from mcts.cards import CardFactory
 from copy import deepcopy
 from mcts import Board
+from collections import deque
 
 def generateDeck():
     cardFactory = CardFactory()
     cards = cardFactory()
     deck = deepcopy(cards) + deepcopy(cards)
     deck = np.random.permutation(deck)
-
-
+    deck = deque(deck)
 
     return deck
 
