@@ -1,1 +1,1 @@
-urwid
+numpy

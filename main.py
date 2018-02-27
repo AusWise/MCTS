@@ -3,11 +3,12 @@ MAX_MINIONS_ON_BOARD = 7
 MINIONS_IN_DECK = 7
 ABILITIES_IN_DECK = 3
 
+from copy import deepcopy
 import numpy as np
 
-from mcts import Hero
-from mcts.cards import CardFactory
-from copy import deepcopy
+from game.hero import Hero
+from game.card import CardFactory
+from game.board import Board
 from mcts import Board
 from collections import deque
 
