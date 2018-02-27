@@ -20,6 +20,8 @@ class Resource:
             self._value = 0
             raise NoPointsError
 
+    def __str__(self):
+        return str(self.value)
 
 class HP(Resource):
     def subtract(self, points):

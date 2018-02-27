@@ -1,6 +1,5 @@
 from game.resource import HP
 
-
 class Card:
     def __init__(self, name, text=None):
         self.name = name
