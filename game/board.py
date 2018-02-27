@@ -11,6 +11,15 @@ class Board:
     def hero2(self):
         return self.halfBoard2.hero
 
+    def __getitem__(self, hero):
+        if hero == self.hero1:
+            return self.halfBoard1
+
+        if hero == self.hero2:
+            return self.halfBoard2
+
+        raise Exception()
+
 class HalfBoard:
     def __init__(self, hero):
         self.hero = hero
