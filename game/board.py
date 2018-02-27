@@ -20,8 +20,14 @@ class Board:
 
         raise Exception()
 
+from .card import CardType
+
 class HalfBoard:
     def __init__(self, hero):
         self.hero = hero
         self.cards = set()
+
+    @property
+    def minions(self):
+        return filter(lambda card: card.type==CardType.MINION, self.cards)
 

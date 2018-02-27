@@ -1,36 +1,61 @@
 from game.resource import HP
 
+from enum import Enum
+
+class CardType(Enum):
+    ABILITY = 0
+    MINION = 1
+
 class Card:
-    def __init__(self, name, text=None):
+    def __init__(self, type, name, text=None):
         self.name = name
         self.text = text
+        self.type = type
 
     def __str__(self):
-        return self.name
-
+        return '[' + 'name: ' + self.name + 'type: ' + self.type + ']'
 
 class Minion(Card):
-    def __init__(self, name, health, text=None):
-        super(Minion, self).__init__(name=name, text=text)
-        self.cost = None
-        self.attack = None
-        self.health = HP(health, min_value=1)
+    def __init__(self, name, text=None, cost=None, health=None, attack=None):
+        super(Minion, self).__init__(type=CardType.MINION, name=name, text=text)
+        self.cost = cost
+        self.attack = attack
+        self.health = health
         self.action = None
 
+    def __str__(self):
+        return '[' + \
+               'name: ' + self.name + ', ' + \
+               'type: ' + str(self.type) + ', ' + \
+               'cost: ' + str(self.cost) + ', ' + \
+               'attack: ' + str(self.attack) + ', ' + \
+               'health: ' + str(self.health) + \
+               ']'
 
 class Ability(Card):
-    def __init__(self, name, text=None):
-        super(Ability, self).__init__(name=name, text=text)
-        self.cost = None
+    def __init__(self, name, text=None, cost=None):
+        super(Ability, self).__init__(type=CardType.ABILITY, name=name, text=text)
+        self.cost = cost
         self.action = None
 
+    def __str__(self):
+        return '[' + \
+               'name: ' + self.name + ', ' + \
+               'type: ' + str(self.type) + ', ' + \
+               'cost: ' + str(self.cost) + \
+               ']'
 
 class CardFactory:
     def __call__(self, *args, **kwargs):
-        cards = [Card("Card 1"), Card("Card 2"),
-                 Card("Card 3"), Card("Card 4"),
-                 Card("Card 5"), Card("Card 6"),
-                 Card("Card 7"), Card("Card 8"),
-                 Card("Card 9"), Card("Card 10")]
+        cards = [Ability("Card 1", cost=1),
+                 Ability("Card 2", cost=2),
+                 Ability("Card 3", cost=3),
+                 Minion("Card 4", cost=4, health=1, attack=1),
+                 Minion("Card 5", cost=5, health=2, attack=2),
+                 Minion("Card 6", cost=6, health=3, attack=3),
+                 Minion("Card 7", cost=7, health=4, attack=4),
+                 Minion("Card 8", cost=8, health=5, attack=5),
+                 Minion("Card 9", cost=9, health=6, attack=6),
+                 Minion("Card 10", cost=10, health=7, attack=7)]
 
         return cards

@@ -30,7 +30,29 @@ class PlayCard(Move):
     def __call__(self, state):
         state.turn.hand.remove(self.card)
         state.board[state.turn].cards.add(self.card)
+        state.moves = state.generateMoves()
+        state.turn.mana -= self.card.cost
         return state
+
+class MinionVsMinion(Move):
+    def __init__(self, minion1, minion2):
+        self.minion1 = minion1
+        self.minion2 = minion2
+
+    def __call__(self, state):
+        self.minion1.health -= self.minion2.attack
+        self.minion2.health -= self.minion1.attack
+
+        if self.minion1.health<=0:
+            state.board[state.turn].cards.remove(self.minion1)
+
+        if self.minion2.health <= 0:
+            state.board[state.enemy(state.turn)].cards.remove(self.minion2)
+
+        state.moves = state.generateMoves()
+
+        return state
+
 
 class Finish(Move):
     def __init__(self):
@@ -38,18 +60,22 @@ class Finish(Move):
 
     def __call__(self, state):
         if state.turn == state.hero1:
-            state.turn = state.hero2
+            turn = state.hero2
+            round = state.round
         elif state.turn == state.hero2:
-            state.round += 1
-            state.turn = state.hero1
+            round = state.round + 1
+            turn = state.hero1
 
-        return state
+        board = state.board
+
+        return State(round, turn, board)
 
 class StatePrinter:
     def __init__(self):
         self.stateString = ''
 
     def printState(self, state):
+        self.stateString = ''
         self.printTurn(state.round)
         self.printTurnOwn(state.turn)
         self.printHand(state.board.hero1)
@@ -64,19 +90,39 @@ class StatePrinter:
         self.printMoves(state.moves)
 
     def printTurn(self, round):
-        self.stateString += 'Turn No: ' + str(round) + '\n'
+        self.stateString += 'Round: ' + str(round) + '\n'
 
     def printTurnOwn(self, turn):
-        self.stateString += 'Turn Own: ' + str(turn.name) + '\n \n'
+        self.stateString += 'Turn: ' + str(turn.name) + '\n \n'
 
     def printHero(self, hero):
         self.stateString +=  str(hero.name) + ': [mana: ' + str(hero.mana) + ', helth: ' + str(hero.health) +' ]'
 
     def printBoard(self, board):
-        pass
+        self.stateString += '--------------------------------------------------'
+        self.stateString += '\n'
+
+        for card in board.halfBoard1.cards:
+            self.printCard(card)
+            self.stateString += '\n'
+
+        self.stateString += '\n'
+
+        self.stateString += '\n'
+        self.stateString += '--------------------------------------------------'
+        self.stateString += '\n'
+
+        self.stateString += '\n'
+
+        for card in board.halfBoard2.cards:
+            self.printCard(card)
+            self.stateString += '\n'
+
+        self.stateString += '\n'
+        self.stateString += '--------------------------------------------------'
 
     def printCard(self, card):
-        self.stateString += card.name
+        self.stateString += str(card)
 
     def printHand(self, hero):
         for card in hero.hand:
@@ -93,36 +139,43 @@ class StatePrinter:
         self.stateString += str(moveNo) + '. '
         if isinstance(move, PlayCard):
             self.stateString += 'Play card ' + move.card.name
+        elif isinstance(move, MinionVsMinion):
+            self.stateString += move.minion1.name + ' vs. ' + move.minion2.name
         elif isinstance(move, Finish):
             self.stateString += 'Finish Turn'
 
 statePrinter = StatePrinter()
 
 class State:
-    def __init__(self, round=1, turn=None):
-        hero1 = Hero(name="Hero 1", deck=generateDeck())
-        hero2 = Hero(name="Hero 2", deck=generateDeck())
+    def __init__(self, round=1, turn=None, board=None):
+        if board is None:
+            hero1 = Hero(name="Hero 1", deck=generateDeck())
+            hero2 = Hero(name="Hero 2", deck=generateDeck())
 
-        self.board = Board(hero1, hero2)
+            self.board = Board(hero1, hero2)
+        else:
+            self.board = board
 
         self.round = round
         if turn is None:
-            self.turn = hero1
+            self.turn = self.hero1
         else:
             self.turn = turn
 
         self.turn.mana = min([round, MAX_MANA])
 
         if self.round==1:
-            if self.turn==hero1:
+            if self.turn==self.hero1:
                 self.turn.hand.add(self.turn.deck.pop())
                 self.turn.hand.add(self.turn.deck.pop())
                 self.turn.hand.add(self.turn.deck.pop())
-            elif self.turn==hero2:
+            elif self.turn==self.hero2:
                 self.turn.hand.add(self.turn.deck.pop())
                 self.turn.hand.add(self.turn.deck.pop())
                 self.turn.hand.add(self.turn.deck.pop())
                 self.turn.hand.add(self.turn.deck.pop())
+        else:
+            self.turn.hand.add(self.turn.deck.pop())
 
         self.moves = self.generateMoves()
 
@@ -134,10 +187,25 @@ class State:
     def hero2(self):
         return self.board.hero2
 
+    def enemy(self, hero):
+        if hero==self.hero1:
+            return self.hero2
+
+        if hero==self.hero2:
+            return self.hero1
+
     def generateMoves(self):
         moves = []
         for card in self.turn.hand:
-            moves.append(PlayCard(card))
+            if card.cost<=self.turn.mana:
+                moves.append(PlayCard(card))
+
+        hero = self.turn
+        enemy = self.enemy(hero)
+
+        for heroMinion in self.board[hero].minions:
+            for enemyMinion in self.board[enemy].minions:
+                moves.append(MinionVsMinion(heroMinion, enemyMinion))
 
         moves.append(Finish())
         return moves
@@ -148,21 +216,16 @@ statePrinter.printState(state)
 
 print(statePrinter.stateString)
 
-moveNo = int(input('Ktory ruch wybierasz: '))
+while(True):
+    moveNo = int(input('Ktory ruch wybierasz: '))
 
-move = state.moves[moveNo]
-state = move(state)
+    move = state.moves[moveNo]
+    state = move(state)
 
-state.generateMoves()
-statePrinter.printState(state)
+    # state.generateMoves()
+    statePrinter.printState(state)
 
-print(statePrinter.stateString)
-
-
-
-
-
-
+    print(statePrinter.stateString)
 
 # turnNo = 1
 # turnOwn = hero2
