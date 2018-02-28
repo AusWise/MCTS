@@ -31,3 +31,11 @@ class HalfBoard:
     def minions(self):
         return filter(lambda card: card.type==CardType.MINION, self.cards)
 
+    def play(self, card):
+        self.hero.hand.remove(card)
+        self.cards.add(card)
+        self.hero.mana -= self.card.cost
+
+    def remove(self, card):
+        self.cards.remove(card)
+

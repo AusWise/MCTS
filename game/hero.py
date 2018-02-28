@@ -7,3 +7,7 @@ class Hero:
         self.health = health
         self.deck = deck
         self.hand = set()
+
+    def pick(self, n=1):
+        for i in range(n):
+            self.hand.add(self.deck.pop())
