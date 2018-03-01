@@ -5,11 +5,10 @@ statePrinter = StatePrinter()
 
 state = State()
 
-statePrinter.printState(state)
-
-print(statePrinter.stateString)
 
 while(True):
+    statePrinter.printState(state)
+
     try:
         moveNo = int(input('Ktory ruch wybierasz: '))
         move = state.moves[moveNo]
@@ -20,7 +19,3 @@ while(True):
 
     if state is None:
         break
-
-    statePrinter.printState(state)
-
-    print(statePrinter.stateString)

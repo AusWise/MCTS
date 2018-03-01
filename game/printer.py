@@ -1,77 +1,58 @@
 from game.move import *
 
 class StatePrinter:
-    def __init__(self):
-        self.stateString = ''
-
     def printState(self, state):
-        self.stateString = ''
+        print('*' * 60)
         self.printTurn(state.round)
         self.printTurnOwn(state.turn)
         self.printHand(state.board.hero1)
         self.printHero(state.board.hero1)
-        self.stateString += '\n'
         self.printBoard(state.board)
-        self.stateString += '\n'
         self.printHero(state.board.hero2)
-        self.stateString += '\n'
         self.printHand(state.board.hero2)
-        self.stateString += '\n'
         self.printMoves(state.moves)
 
-    def printTurn(self, round):
-        self.stateString += 'Round: ' + str(round) + '\n'
+    def printTurn(self, _round):
+        print('Round: ' + str(_round))
 
     def printTurnOwn(self, turn):
-        self.stateString += 'Turn: ' + str(turn.name) + '\n \n'
+        print('Turn: ' + str(turn.name) + '\n')
 
     def printHero(self, hero):
-        self.stateString +=  str(hero.name) + ': [mana: ' + str(hero.mana) + ', helth: ' + str(hero.health) +' ]'
+        print( str(hero.name) + ': [mana: ' + str(hero.mana) + ', health: ' + str(hero.health) +' ]')
 
     def printBoard(self, board):
-        self.stateString += '--------------------------------------------------'
-        self.stateString += '\n'
+        print('--------------------------------------------------')
+        def _print_player_board(cards):
+            for _card in cards:
+                self.printCard(_card)
+                print()
+            print('\n--------------------------------------------------')
 
-        for card in board.halfBoard1.cards:
-            self.printCard(card)
-            self.stateString += '\n'
-
-        self.stateString += '\n'
-
-        self.stateString += '\n'
-        self.stateString += '--------------------------------------------------'
-        self.stateString += '\n'
-
-        self.stateString += '\n'
-
-        for card in board.halfBoard2.cards:
-            self.printCard(card)
-            self.stateString += '\n'
-
-        self.stateString += '\n'
-        self.stateString += '--------------------------------------------------'
+        _print_player_board(board.halfBoard1.cards)
+        _print_player_board(board.halfBoard2.cards)
 
     def printCard(self, card):
-        self.stateString += str(card)
+        print(str(card), end='')
 
     def printHand(self, hero):
         for card in hero.hand:
-            self.stateString += str(card) + '\n'
+            print(str(card))
 
     def printMoves(self, moves):
-        self.stateString += 'Moves: \n'
+        print('Moves: ')
         for moveNo in range(len(moves)):
             move = moves[moveNo]
             self.printMove(move, moveNo)
-            self.stateString += '\n'
+            print()
 
     def printMove(self, move, moveNo):
-        self.stateString += str(moveNo) + '. '
+        print(str(moveNo) + '. ', end='')
         if isinstance(move, PlayCard):
-            self.stateString += 'Play card ' + move.card.name
+            print('Play card ' + move.card.name, end='')
         elif isinstance(move, MinionVsMinion):
-            self.stateString += move.minion1.name + ' vs. ' + move.minion2.name
+            print(move.minion1.name + ' vs. ' + move.minion2.name, end='')
         elif isinstance(move, MinionVsHero):
-            self.stateString += move.minion.name + ' vs. ' + move.hero.name
+            print(move.minion.name + ' vs. ' + move.hero.name, end='')
         elif isinstance(move, FinishTurn):
-            self.stateString += 'Finish Turn'
+            print('Finish Turn', end='')
