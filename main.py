@@ -10,9 +10,12 @@ statePrinter.printState(state)
 print(statePrinter.stateString)
 
 while(True):
-    moveNo = int(input('Ktory ruch wybierasz: '))
-
-    move = state.moves[moveNo]
+    try:
+        moveNo = int(input('Ktory ruch wybierasz: '))
+        move = state.moves[moveNo]
+    except (IndexError, ValueError):
+        print('Niepoprawny ruch, spróbuj ponownie.')
+        continue
     state = move(state)
 
     if state is None:
