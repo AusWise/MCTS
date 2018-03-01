@@ -19,7 +19,7 @@ def generateDeck():
     return deck
 
 class State:
-    def __init__(self, round=1, turn=None, board=None):
+    def __init__(self, _round=1, turn=None, board=None):
         if board is None:
             hero1 = Hero(name="Hero 1", deck=generateDeck())
             hero2 = Hero(name="Hero 2", deck=generateDeck())
@@ -28,13 +28,13 @@ class State:
         else:
             self.board = board
 
-        self.round = round
+        self.round = _round
         if turn is None:
             self.turn = self.hero1
         else:
             self.turn = turn
 
-        self.turn.mana = min([round, MAX_MANA])
+        self.turn.mana = min([_round, MAX_MANA])
 
         if self.round==1:
             if self.turn==self.hero1:
@@ -104,14 +104,14 @@ class State:
     def nextTurn(self):
         if self.turn == self.hero1:
             turn = self.hero2
-            round = self.round
+            _round = self.round
         elif self.turn == self.hero2:
-            round = self.round + 1
+            _round = self.round + 1
             turn = self.hero1
 
         board = self.board
 
-        return State(round, turn, board)
+        return State(_round, turn, board)
 
     def nextMove(self):
         self.generateMoves()
