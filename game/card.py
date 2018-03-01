@@ -1,10 +1,10 @@
 from game.resource import HP
-
 from enum import Enum
 
 class CardType(Enum):
     ABILITY = 0
     MINION = 1
+
 
 class Card:
     def __init__(self, type, name, text=None):
@@ -13,7 +13,8 @@ class Card:
         self.type = type
 
     def __str__(self):
-        return '[' + 'name: ' + self.name + 'type: ' + self.type + ']'
+        return "[name: {n}, type: {t}]".format(n=self.name, t=self.type)
+
 
 class Minion(Card):
     def __init__(self, name, text=None, cost=None, health=None, attack=None):
@@ -24,13 +25,11 @@ class Minion(Card):
         self.action = None
 
     def __str__(self):
-        return '[' + \
-               'name: ' + self.name + ', ' + \
-               'type: ' + str(self.type) + ', ' + \
-               'cost: ' + str(self.cost) + ', ' + \
-               'attack: ' + str(self.attack) + ', ' + \
-               'health: ' + str(self.health) + \
-               ']'
+        kwargs = {'name': self.name, 'type': str(self.type), 'cost': self.cost,
+                  'attack': str(self.attack), 'health': str(self.health)}
+        return "[name: {name}, type: {type}, cost: {cost}, attack: {attack},"\
+                "health: {health}]]".format(**kwargs)
+
 
 class Ability(Card):
     def __init__(self, name, text=None, cost=None):
@@ -39,11 +38,9 @@ class Ability(Card):
         self.action = None
 
     def __str__(self):
-        return '[' + \
-               'name: ' + self.name + ', ' + \
-               'type: ' + str(self.type) + ', ' + \
-               'cost: ' + str(self.cost) + \
-               ']'
+        kwargs = {'name': self.name, 'type': str(self.type), 'cost': self.cost}
+        return "[name: {name}, type: {type}, cost: {cost}]".format(**kwargs)
+
 
 class CardFactory:
     def __call__(self, *args, **kwargs):
