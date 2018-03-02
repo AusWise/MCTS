@@ -1,5 +1,3 @@
-from game.move import *
-
 class StatePrinter:
     def printState(self, state):
         print('*' * 60)
@@ -47,12 +45,4 @@ class StatePrinter:
             print()
 
     def printMove(self, move, moveNo):
-        print(str(moveNo) + '. ', end='')
-        if isinstance(move, PlayCard):
-            print('Play card ' + move.card.name, end='')
-        elif isinstance(move, MinionVsMinion):
-            print(move.minion1.name + ' vs. ' + move.minion2.name, end='')
-        elif isinstance(move, MinionVsHero):
-            print(move.minion.name + ' vs. ' + move.hero.name, end='')
-        elif isinstance(move, FinishTurn):
-            print('Finish Turn', end='')
+        print("{}. {}".format(moveNo, move), end='')
