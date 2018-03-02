@@ -7,7 +7,6 @@ class PlayCard(Move):
 
     def __call__(self, state):
         state.board[state.turn].play(self.card)
-        return state.nextMove()
 
 class MinionVsMinion(Move):
     def __init__(self, minion1, minion2):
@@ -24,8 +23,6 @@ class MinionVsMinion(Move):
         if self.minion2.health <= 0:
             state.board[state.enemy(state.turn)].remove(self.minion2)
 
-        return state.nextMove()
-
 class MinionVsHero(Move):
     def __init__(self, minion, hero):
         self.minion = minion
@@ -37,11 +34,6 @@ class MinionVsHero(Move):
         if self.hero.health <= 0:
             return None
 
-        return state.nextMove()
-
 class FinishTurn(Move):
-    def __init__(self):
-        pass
-
     def __call__(self, state):
         return state.nextTurn()

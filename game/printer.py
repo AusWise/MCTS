@@ -3,7 +3,7 @@ from game.move import *
 class StatePrinter:
     def printState(self, state):
         print('*' * 60)
-        self.printTurn(state.round)
+        self.printTurn(state.current_round)
         self.printTurnOwn(state.turn)
         self.printHand(state.board.hero1)
         self.printHero(state.board.hero1)

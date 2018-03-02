@@ -1,49 +1,18 @@
 from game.move import PlayCard, MinionVsHero, MinionVsMinion, FinishTurn
-from game.hero import Hero
-from game.card import CardFactory
-from game.board import Board
-from collections import deque
 
-from copy import deepcopy
-import numpy as np
-
-MAX_MANA = 10
-
-def generateDeck():
-    cardFactory = CardFactory()
-    cards = cardFactory()
-    deck = deepcopy(cards) + deepcopy(cards)
-    deck = np.random.permutation(deck)
-    deck = deque(deck)
-
-    return deck
 
 class State:
-    def __init__(self, _round=1, turn=None, board=None):
-        if board is None:
-            hero1 = Hero(name="Hero 1", deck=generateDeck())
-            hero2 = Hero(name="Hero 2", deck=generateDeck())
+    def __init__(self, board):
+        self.MAX_MANA = 10
+        self.board = board
+        self.current_round = 1
+        self.turn = self.board.hero1
 
-            self.board = Board(hero1, hero2)
-        else:
-            self.board = board
+        self.hero1.mana = 1
+        self.hero1.mana = 1
 
-        self.round = _round
-        if turn is None:
-            self.turn = self.hero1
-        else:
-            self.turn = turn
-
-        self.turn.mana = min([_round, MAX_MANA])
-
-        if self.round==1:
-            if self.turn==self.hero1:
-                self.turn.pick(3)
-            elif self.turn==self.hero2:
-                self.turn.pick(4)
-        else:
-            self.turn.pick()
-
+        self.hero1.pick(3)
+        self.hero2.pick(4)
         self.moves = self.generateMoves()
 
     @property
@@ -64,15 +33,14 @@ class State:
     def generateMoves(self):
         moves = []
 
-        moves += self._genertatePlayCardMoves()
+        moves += self._generatePlayCardMoves()
         moves += self._generateMinionVsMinionMoves()
         moves += self._generateMinionVsHeroMoves()
         moves.append(FinishTurn())
 
-        self.moves = moves
         return moves
 
-    def _genertatePlayCardMoves(self):
+    def _generatePlayCardMoves(self):
         moves = []
         for card in self.turn.hand:
             if card.cost <= self.turn.mana:
@@ -104,18 +72,13 @@ class State:
     def nextTurn(self):
         if self.turn == self.hero1:
             turn = self.hero2
-            _round = self.round
+            _round = self.current_round
         elif self.turn == self.hero2:
-            _round = self.round + 1
+            _round = self.current_round + 1
             turn = self.hero1
 
-        board = self.board
-
-        return State(_round, turn, board)
+    # adapt nextTurn after small refactor
 
     def nextMove(self):
-        self.generateMoves()
+        self.moves = self.generateMoves()
         return self
-
-
-
