@@ -1,20 +1,20 @@
 class StatePrinter:
     def printState(self, state):
         print('*' * 60)
-        self.printTurn(state.current_round)
-        self.printTurnOwn(state.turn)
-        self.printHand(state.board.hero1)
-        self.printHero(state.board.hero1)
+        self.printTurn(state.board.rounds_count)
+        self.printTurnOwn(state.board.active_player)
+        self.printHand(state.board.active_player)
+        self.printHero(state.board.active_player)
         self.printBoard(state.board)
-        self.printHero(state.board.hero2)
-        self.printHand(state.board.hero2)
+        self.printHero(state.board.enemy)
+        self.printHand(state.board.enemy)
         self.printMoves(state.moves)
 
     def printTurn(self, _round):
         print('Round: ' + str(_round))
 
-    def printTurnOwn(self, turn):
-        print('Turn: ' + str(turn.name) + '\n')
+    def printTurnOwn(self, player):
+        print('Turn: ' + str(player.name) + '\n')
 
     def printHero(self, hero):
         print( str(hero.name) + ': [mana: ' + str(hero.mana) + ', health: ' + str(hero.health) +' ]')
@@ -27,8 +27,8 @@ class StatePrinter:
                 print()
             print('\n--------------------------------------------------')
 
-        _print_player_board(board.halfBoard1.cards)
-        _print_player_board(board.halfBoard2.cards)
+        _print_player_board(board.active_player_panel.cards)
+        _print_player_board(board.enemy_panel.cards)
 
     def printCard(self, card):
         print(str(card), end='')

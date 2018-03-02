@@ -3,82 +3,46 @@ from game.move import PlayCard, MinionVsHero, MinionVsMinion, FinishTurn
 
 class State:
     def __init__(self, board):
-        self.MAX_MANA = 10
         self.board = board
-        self.current_round = 1
-        self.turn = self.board.hero1
+        self.generateMoves()
 
-        self.hero1.mana = 1
-        self.hero1.mana = 1
+    def nextTurn(self):
+        self.board.nextPlayer()
+        self.generateMoves()
 
-        self.hero1.pick(3)
-        self.hero2.pick(4)
-        self.moves = self.generateMoves()
-
-    @property
-    def hero1(self):
-        return self.board.hero1
-
-    @property
-    def hero2(self):
-        return self.board.hero2
-
-    def enemy(self, hero):
-        if hero==self.hero1:
-            return self.hero2
-
-        if hero==self.hero2:
-            return self.hero1
+    def nextMove(self):
+        self.generateMoves()
 
     def generateMoves(self):
-        moves = []
+        self.moves = []
 
-        moves += self._generatePlayCardMoves()
-        moves += self._generateMinionVsMinionMoves()
-        moves += self._generateMinionVsHeroMoves()
-        moves.append(FinishTurn())
-
-        return moves
+        self.moves += self._generatePlayCardMoves()
+        self.moves += self._generateMinionVsMinionMoves()
+        self.moves += self._generateMinionVsHeroMoves()
+        self.moves.append(FinishTurn())
 
     def _generatePlayCardMoves(self):
         moves = []
-        for card in self.turn.hand:
-            if card.cost <= self.turn.mana:
+
+        for card in self.board.active_player.hand:
+            if card.cost <= self.board.active_player.mana.value:
                 moves.append(PlayCard(card))
 
         return moves
 
     def _generateMinionVsMinionMoves(self):
         moves = []
-        hero = self.turn
-        enemy = self.enemy(hero)
 
-        for heroMinion in self.board[hero].minions:
-            for enemyMinion in self.board[enemy].minions:
+        for heroMinion in self.board.active_player_panel.minions:
+            for enemyMinion in self.board.enemy_panel.minions:
                 moves.append(MinionVsMinion(heroMinion, enemyMinion))
 
         return moves
 
     def _generateMinionVsHeroMoves(self):
         moves = []
-        hero = self.turn
-        enemy = self.enemy(hero)
 
-        for minion in self.board[hero].minions:
+        for minion in self.board.active_player_panel.minions:
             moves.append(MinionVsHero(minion, enemy))
 
         return moves
-
-    def nextTurn(self):
-        if self.turn == self.hero1:
-            turn = self.hero2
-            _round = self.current_round
-        elif self.turn == self.hero2:
-            _round = self.current_round + 1
-            turn = self.hero1
-
-    # adapt nextTurn after small refactor
-
-    def nextMove(self):
-        self.moves = self.generateMoves()
-        return self
