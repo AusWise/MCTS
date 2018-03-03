@@ -41,6 +41,7 @@ class State:
 
     def _generateMinionVsHeroMoves(self):
         moves = []
+        enemy = self.board.enemy
 
         for minion in self.board.active_player_panel.minions:
             moves.append(MinionVsHero(minion, enemy))
