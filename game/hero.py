@@ -20,11 +20,17 @@ class Hero(Character):
         for i in range(n):
             self.hand.add(self.deck.pop())
 
-    def __repr__(self):
-        return self.name
-
     def burn_mana(self, points):
         self.mana.points -= points
 
     def has_enough_mana(self, cost):
         return self.mana.points >= cost
+
+    def __str__(self):
+        mana = self.mana
+        hp = self.health
+        return "{}: [HP:{}/{}, mana: {}/{}]".format(
+            self.name, hp, 20, mana.points, mana._max)
+
+    def __repr__(self):
+        return self.name

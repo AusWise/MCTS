@@ -49,9 +49,9 @@ class Resource:
 
 class HP(Resource):
     def __init__(self, value):
-        super(HP, self).__init__(value, min_value=1, max_value=10)
+        super(HP, self).__init__(value, min_value=1, max_value=20)
         self.value = max([value, self._max])
 
 class Mana(Resource):
     def __init__(self, value):
-        super(Mana, self).__init__(value, min_value=0, max_value=20)
+        super(Mana, self).__init__(value, min_value=0, max_value=10)
