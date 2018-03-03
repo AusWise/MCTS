@@ -6,41 +6,45 @@ class CardType(Enum):
     ABILITY = 0
     MINION = 1
 
+    def __str__(self):
+        return self.name
+
 
 class Card:
-    def __init__(self, type, name, text=None):
+    def __init__(self, type, name, cost, text=None):
         self.name = name
         self.text = text
         self.type = type
+        self.cost = cost
 
     def __str__(self):
-        return "[name: {n}, type: {t}]".format(n=self.name, t=self.type)
+        kwargs = dict(name=self.name, type=self.type, cost=self.cost)
+        return "name: {name} ({type}), cost: {cost}".format(**kwargs)
 
 
 class Minion(Card, Character):
     def __init__(self, name, text=None, cost=None, health=None, attack=None):
-        super(Minion, self).__init__(type=CardType.MINION, name=name, text=text)
-        self.cost = cost
+        super(Minion, self).__init__(type=CardType.MINION, name=name, cost=cost,
+                                     text=text)
         self.attack = attack
         self.health = health
         self.action = None
 
     def __str__(self):
-        kwargs = {'name': self.name, 'type': str(self.type), 'cost': self.cost,
-                  'attack': str(self.attack), 'health': str(self.health)}
-        return "[name: {name}, type: {type}, cost: {cost}, attack: {attack},"\
-                "health: {health}]]".format(**kwargs)
+        card_descr = super(Minion, self).__str__()
+        kwargs = {'attack': str(self.attack), 'health': str(self.health)}
+        minion_descr = "attack: {attack}, HP: {health}".format(**kwargs)
+        return "[{}, {}]".format(card_descr, minion_descr)
 
 
 class Ability(Card):
     def __init__(self, name, text=None, cost=None):
-        super(Ability, self).__init__(type=CardType.ABILITY, name=name, text=text)
-        self.cost = cost
+        super(Ability, self).__init__(type=CardType.ABILITY, name=name,
+                                      cost=cost, text=text)
         self.action = None
 
     def __str__(self):
-        kwargs = {'name': self.name, 'type': str(self.type), 'cost': self.cost}
-        return "[name: {name}, type: {type}, cost: {cost}]".format(**kwargs)
+        return "[{}]".format(super(Ability, self).__str__())
 
 
 class CardFactory:
