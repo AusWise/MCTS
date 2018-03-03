@@ -39,10 +39,13 @@ from game.exception import NoPointsError
 #         self._value = self._max_value
 
 class Resource:
-    def __init__(self, value, min_value, max_value):
-        self.value = value
+    def __init__(self, points, min_value, max_value):
+        self.points = points
         self._min = min_value
         self._max = max_value
+
+    def __repr__(self):
+        return str(self.points)
 
 class HP(Resource):
     def __init__(self, value):

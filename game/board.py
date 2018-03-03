@@ -37,25 +37,21 @@ class Board:
 
     @property
     def rounds_count(self):
-        return self._switch_count % 2
+        return self._switch_count // 2
 
     def nextPlayer(self):
         _before_round_count = self.rounds_count
         self._active_player = self._players_order[self._active_player]
         self._switch_count += 1
-        if self.rounds_count - _before_round_count > 1:
+        diff = self.rounds_count - _before_round_count
+        if diff < 1:
             self._dealNewTurn()
-
-    def playActivePlayersCard(self, card):
-        self.active_panel.play(card)
-
-    def removeActivePlayersCard(self, card):
-        self.active_panel.remove(card)
 
     def _dealNewTurn(self):
         MAX_MANA = 10
-        turn.mana = min([turn.mana + 1, MAX_MANA])
-        turn.pick()
+        for player in self._players_order.keys():
+            player.mana.points = min([player.mana.points + 1, MAX_MANA])
+            player.pick()
 
 
 class PlayersPanel:
@@ -68,10 +64,10 @@ class PlayersPanel:
     def minions(self):
         return filter(lambda card: card.type==CardType.MINION, self.cards)
 
-    def play(self, card):
+    def play_card(self, card):
         self.hero.hand.remove(card)
         self.cards.add(card)
-        self.hero.mana -= self.card.cost
+        self.hero.burn_mana(card.cost)
 
-    def remove(self, card):
+    def remove_card(self, card):
         self.cards.remove(card)

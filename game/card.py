@@ -1,4 +1,5 @@
 from game.resource import HP
+from game.hero import Character
 from enum import Enum
 
 class CardType(Enum):
@@ -16,7 +17,7 @@ class Card:
         return "[name: {n}, type: {t}]".format(n=self.name, t=self.type)
 
 
-class Minion(Card):
+class Minion(Card, Character):
     def __init__(self, name, text=None, cost=None, health=None, attack=None):
         super(Minion, self).__init__(type=CardType.MINION, name=name, text=text)
         self.cost = cost

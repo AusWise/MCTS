@@ -25,7 +25,7 @@ class State:
         moves = []
 
         for card in self.board.active_player.hand:
-            if card.cost <= self.board.active_player.mana.value:
+            if self.board.active_player.has_enough_mana(card.cost):
                 moves.append(PlayCard(card))
 
         return moves

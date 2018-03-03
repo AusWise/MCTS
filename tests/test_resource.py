@@ -10,7 +10,7 @@ class TestResource(unittest.TestCase):
         self.assertTrue(self.res.has_points_left())
 
     def test_getResourceValue_returnCorrectIntegerValue(self):
-        self.assertEquals(self.res.value, 10)
+        self.assertEquals(self.res.points, 10)
 
 
 class TestHPResource(unittest.TestCase):
@@ -33,9 +33,9 @@ class TestManaResource(unittest.TestCase):
     def test_subtractMorePointsThanResourceHas_valueSetToZero(self):
         self.res.subtract(100)
         self.assertFalse(self.res.has_points_left())
-        self.assertEquals(self.res.value, 0)
+        self.assertEquals(self.res.points, 0)
 
     def test_restore_allManaPointsRestored(self):
         self.res._value = 0
         self.res.restore()
-        self.assertEqual(self.res.value, 10)
+        self.assertEqual(self.res.points, 10)
