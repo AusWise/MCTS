@@ -4,16 +4,20 @@ class StatePrinter:
 
     def printState(self, state):
         top_player = state.board.enemy
+        top_panel = state.board.enemy_panel
         bottom_player = state.board.active_player
+        bottom_panel = state.board.active_player_panel
 
         self._printSeparator('*')
         self.printTurn(state.board.rounds_count)
-        self.printTurnOwn(top_player)
+        self.printTurnOwn(state.board.active_player)
 
         self.printHand(top_player)
         self.printHero(top_player)
 
-        self.printBoard(state.board)
+        self._printSeparator('-')
+        self.printBoard(top_panel)
+        self.printBoard(bottom_panel)
 
         self.printHero(bottom_player)
         self.printHand(bottom_player)
@@ -30,17 +34,13 @@ class StatePrinter:
     def printHero(self, hero):
         print(hero)
 
-    def printBoard(self, board):
-        self._printSeparator('-')
-        def _print_player_board(cards):
-            for _card in cards:
-                self.printCard(_card)
-                print()
+    def printBoard(self, players_panel):
+        for _card in players_panel.cards:
+            self.printCard(_card)
             print()
-            self._printSeparator('-')
+        print()
+        self._printSeparator('-')
 
-        _print_player_board(board.active_player_panel.cards)
-        _print_player_board(board.enemy_panel.cards)
 
     def printCard(self, card):
         print(str(card), end='')

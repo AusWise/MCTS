@@ -19,7 +19,7 @@ class Card:
 
     def __str__(self):
         kwargs = dict(name=self.name, type=self.type, cost=self.cost)
-        return "name: {name} ({type}), cost: {cost}".format(**kwargs)
+        return "{name} ({type}), cost: {cost}".format(**kwargs)
 
 
 class Minion(Card, Character):
