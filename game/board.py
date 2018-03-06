@@ -37,7 +37,7 @@ class Board:
 
     @property
     def rounds_count(self):
-        return self._switch_count // 2
+        return self._switch_count // 2 + 1
 
     def nextPlayer(self):
         _before_round_count = self.rounds_count
@@ -50,7 +50,7 @@ class Board:
     def _dealNewTurn(self):
         MAX_MANA = 10
         for player in self._players_order.keys():
-            player.mana.points = min([player.mana.points + 1, MAX_MANA])
+            player.mana.points = min([self.rounds_count, MAX_MANA])
             player.pick()
             self._panels[player].enable_cards()
 
