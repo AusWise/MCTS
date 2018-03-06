@@ -52,6 +52,7 @@ class Board:
         for player in self._players_order.keys():
             player.mana.points = min([player.mana.points + 1, MAX_MANA])
             player.pick()
+            self._panels[player].enable_cards()
 
 
 class PlayersPanel:
@@ -62,7 +63,8 @@ class PlayersPanel:
 
     @property
     def minions(self):
-        return filter(lambda card: card.type==CardType.MINION, self.cards)
+        return filter(lambda card: card.type==CardType.MINION and not card.used,
+                      self.cards)
 
     def play_card(self, card):
         self.hero.hand.remove(card)
@@ -71,3 +73,7 @@ class PlayersPanel:
 
     def remove_card(self, card):
         self.cards.remove(card)
+
+    def enable_cards(self):
+        for card in self.cards:
+            card.used = False

@@ -16,10 +16,13 @@ class Card:
         self.text = text
         self.type = type
         self.cost = cost
+        self.used = False
 
     def __str__(self):
-        kwargs = dict(name=self.name, type=self.type, cost=self.cost)
-        return "{name} ({type}), cost: {cost}".format(**kwargs)
+        card_used = "(USED) " if self.used else ""
+        kwargs = dict(name=self.name, type=self.type, cost=self.cost,
+                      used=card_used)
+        return "{used}{name} ({type}), cost: {cost}".format(**kwargs)
 
 
 class Minion(Card, Character):

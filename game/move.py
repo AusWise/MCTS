@@ -37,6 +37,7 @@ class MinionVsHero(Move):
 
     def __call__(self, state):
         self.hero.lose_health(self.minion.attack)
+        self.minion.used = True
 
         if not self.hero.is_alive():
             return None
