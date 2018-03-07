@@ -1,4 +1,4 @@
-from game.move import PlayCard, MinionVsHero, MinionVsMinion, FinishTurn
+from game.move import PlayCard, MinionVsHero, MinionVsMinion, FinishTurn, PlayMinionCard, PlayAbilityCard
 
 
 class GameEngine:
@@ -24,19 +24,32 @@ class GameEngine:
     def generateMoves(self):
         self.moves = []
 
-        self.moves += self._generatePlayCardMoves()
+        self.moves += self._generateMinionCardMoves()
+        self.moves += self._generateAbilityCardMoves()
         self.moves += self._generateMinionVsMinionMoves()
         self.moves += self._generateMinionVsHeroMoves()
         self.moves.append(FinishTurn())
 
-    def _generatePlayCardMoves(self):
+    def _generateMinionCardMoves(self):
         moves = []
 
-        for card in self.board.active_player.hand:
+        for card in self.board.active_player.hand_minions:
             if self.board.active_player.has_enough_mana(card.cost):
-                moves.append(PlayCard(card))
+                moves.append(PlayMinionCard(card))
 
         return moves
+
+
+    def _generateAbilityCardMoves(self):
+        moves = []
+        enemy = self.board.enemy
+
+        for card in self.board.active_player.hand_abilities:
+            if self.board.active_player.has_enough_mana(card.cost):
+                moves.append(PlayAbilityCard(card, enemy))
+
+        return moves
+
 
     def _generateMinionVsMinionMoves(self):
         moves = []

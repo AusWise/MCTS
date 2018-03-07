@@ -12,6 +12,24 @@ class PlayCard(Move):
         return 'Play card ' + self.card.name
 
 
+class PlayMinionCard(PlayCard):
+    pass
+
+
+class PlayAbilityCard(Move):
+    def __init__(self, card, target):
+        self.card = card
+        self.target = target
+
+    def __call__(self, state):
+        # implement attack
+        #state.board.active_panel.remove_card(self.card)
+        state.board.active_player.hand.remove(self.card)
+
+    def __str__(self):
+        return "Use ability " + self.card.name
+
+
 class MinionVsMinion(Move):
     def __init__(self, minion1, minion2):
         self.minion1 = minion1
