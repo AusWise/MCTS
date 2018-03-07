@@ -2,7 +2,7 @@ from game.engine import GameEngine
 from game.printer import StatePrinter
 from game.builder import BoardBuilder
 from game.move import FinishTurn
-from game.hero import Hero
+from game.hero import Hero, AI
 
 
 def game_loop(engine, statePrinter):

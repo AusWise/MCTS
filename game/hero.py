@@ -1,4 +1,6 @@
+import random
 from game.resource import HP, Mana
+from game.move import *
 
 
 class Character:
@@ -41,10 +43,27 @@ class Hero(BaseHero):
 
 
 class AI(BaseHero):
-    def decide(self, moves):
+    def choose_move(self, moves):
         raise NotImplemented
+
+    def choose_move(self, moves):
+        return min(moves, key=self._get_move_index)
+
+    def _get_move_index(self, move):
+        return self._order.index(type(move))
+
+
+class RandomAI(AI):
+    def choose_move(self, moves):
+        return random.choice(moves)
 
 
 class DefensiveAI(AI):
-    def deicde(self, moves):
-        pass
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self._order = [MinionVsMinion, MinionVsHero, PlayCard, FinishTurn]
+
+class OffensiveAI(AI):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self._order = [MinionVsHero, MinionVsMinion, PlayCard, FinishTurn]
