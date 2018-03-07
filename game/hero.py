@@ -1,5 +1,6 @@
 from game.resource import HP, Mana
 
+
 class Character:
     def lose_health(self, points):
         self.health -= points
@@ -7,8 +8,7 @@ class Character:
     def is_alive(self):
         return self.health > 0
 
-
-class Hero(Character):
+class BaseHero(Character):
     def __init__(self, name, deck, health=20, mana=1):
         self.name = name
         self.mana = Mana(mana)
@@ -34,3 +34,17 @@ class Hero(Character):
 
     def __repr__(self):
         return self.name
+
+
+class Hero(BaseHero):
+    pass
+
+
+class AI(BaseHero):
+    def decide(self, moves):
+        raise NotImplemented
+
+
+class DefensiveAI(AI):
+    def deicde(self, moves):
+        pass
