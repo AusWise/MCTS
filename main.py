@@ -1,29 +1,24 @@
-from game.state import State
+from game.state import GameEngine
 from game.printer import StatePrinter
 from game.builder import BoardBuilder
 from game.move import FinishTurn
 
 
-def game_loop(state, statePrinter):
+def game_loop(engine, statePrinter):
     while(True):
-        statePrinter.printState(state)
+        statePrinter.printState(engine)
 
         try:
             moveNo = int(input('Ktory ruch wybierasz: '))
-            move = state.moves[moveNo]
+            move = engine.moves[moveNo]
         except (IndexError, ValueError):
             print('Niepoprawny ruch, spróbuj ponownie.')
             continue
-
-        if isinstance(move, FinishTurn):
-            state.nextTurn()
-        else:
-            move(state)
-            state.nextMove()
+        engine.performMove(move)
 
 
 if __name__ == "__main__":
     statePrinter = StatePrinter()
     board = BoardBuilder().build()
-    state = State(board=board)
-    game_loop(state=state, statePrinter=statePrinter)
+    engine = GameEngine(board=board)
+    game_loop(engine=engine, statePrinter=statePrinter)

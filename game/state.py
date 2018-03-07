@@ -1,7 +1,7 @@
 from game.move import PlayCard, MinionVsHero, MinionVsMinion, FinishTurn
 
 
-class State:
+class GameEngine:
     def __init__(self, board):
         self.board = board
         self.generateMoves()
@@ -9,6 +9,14 @@ class State:
     def nextTurn(self):
         self.board.nextPlayer()
         self.generateMoves()
+
+    def performMove(self, move):
+        if isinstance(move, FinishTurn):
+            self.nextTurn()
+        else:
+            #TODO: extract state
+            move(self)
+            self.nextMove()
 
     def nextMove(self):
         self.generateMoves()
