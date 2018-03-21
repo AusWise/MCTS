@@ -9,7 +9,7 @@ class StatePrinter:
         bottom_panel = state.board.active_player_panel
 
         self._printSeparator('*')
-        self.printTurn(state.board.rounds_count)
+        self.printTurn(state.round)
         self.printTurnOwn(state.board.active_player)
 
         self.printHand(top_player)

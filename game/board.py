@@ -1,18 +1,24 @@
 from .card import CardType
 
-
 class Board:
     def __init__(self, hero1, hero2):
         self._panels = {
             hero1: PlayersPanel(hero1, cards_numb=3),
             hero2: PlayersPanel(hero2, cards_numb=4)
         }
+
+        self.panels = self._panels
+
         self._players_order = {
             hero1: hero2,
             hero2: hero1
         }
+
         self._active_player = hero1
         self._switch_count = 0
+
+        self.hero1 = hero1
+        self.hero2 = hero2
 
     @property
     def active_player(self):
@@ -30,7 +36,6 @@ class Board:
     def enemy_panel(self):
         return self._panels[self.enemy]
 
-
     @property
     def active_panel(self):
         return self._panels[self._active_player]
@@ -39,7 +44,7 @@ class Board:
     def rounds_count(self):
         return self._switch_count // 2 + 1
 
-    def nextPlayer(self):
+    def _nextPlayer(self):
         _before_round_count = self.rounds_count
         self._active_player = self._players_order[self._active_player]
         self._switch_count += 1

@@ -7,6 +7,7 @@ class PlayCard(Move):
 
     def __call__(self, state):
         state.board.active_panel.play_card(self.card)
+        return state
 
     def __str__(self):
         return 'Play card ' + self.card.name
@@ -25,6 +26,7 @@ class PlayAbilityCard(Move):
         # implement attack
         #state.board.active_panel.remove_card(self.card)
         state.board.active_player.hand.remove(self.card)
+        return state
 
     def __str__(self):
         return "Use ability " + self.card.name
@@ -45,6 +47,8 @@ class MinionVsMinion(Move):
         if not self.minion2.is_alive():
             state.board.enemy_panel.remove_card(self.minion2)
 
+        return state
+
     def __str__(self):
         return self.minion1.name + ' vs. ' + self.minion2.name
 
@@ -60,12 +64,14 @@ class MinionVsHero(Move):
         if not self.hero.is_alive():
             return None
 
+        return state
+
     def __str__(self):
         return self.minion.name + ' vs. ' + self.hero.name
 
 class FinishTurn(Move):
     def __call__(self, state):
-        pass
+        return state
 
     def __str__(self):
         return 'Finish Turn'
