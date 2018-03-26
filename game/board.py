@@ -1,4 +1,6 @@
 from .card import CardType
+import itertools
+
 
 class Board:
     def __init__(self, hero1, hero2):
@@ -16,9 +18,6 @@ class Board:
 
         self._active_player = hero1
         self._switch_count = 0
-
-        self.hero1 = hero1
-        self.hero2 = hero2
 
     @property
     def active_player(self):
@@ -58,6 +57,19 @@ class Board:
             player.mana.points = min([self.rounds_count, MAX_MANA])
             player.pick()
             self._panels[player].enable_cards()
+
+    def _has_lost(self, player):
+        return player.health <= 0
+
+    def winner(self):
+        import ipdb; ipdb.set_trace()
+        players = list(self._panels)
+        losers = [self._has_lost(p) for p in players]
+        if all(losers):
+            raise ValueError('Both players marked as losers!')
+        elif any(losers):
+            ind = losers.index(False)
+            return players[ind]
 
 
 class PlayersPanel:

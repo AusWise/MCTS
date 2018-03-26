@@ -28,11 +28,8 @@ class State:
 class GameEngine:
     def __init__(self, board):
         self.state = State(board)
+        self.board = board
         self.nextMove()
-
-    @property
-    def board(self):
-        return self.state.board
 
     def nextTurn(self):
         self.board._nextPlayer()
@@ -43,7 +40,11 @@ class GameEngine:
             self.nextTurn()
         else:
             self.state = move(self.state)
-            self.nextMove()
+            winner = self.board.winner()
+            if winner is not None:
+                return winner
+            else:
+                self.nextMove()
 
     def nextMove(self):
         self.state.moves = self.generateMoves()

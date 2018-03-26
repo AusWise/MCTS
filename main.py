@@ -4,6 +4,7 @@ from game.engine import GameEngine
 from game.printer import StatePrinter
 from game.builder import BoardBuilder
 from game.hero import Hero, AI
+import sys
 
 def game_loop(engine, statePrinter):
     while(True):
@@ -20,9 +21,10 @@ def game_loop(engine, statePrinter):
         elif isinstance(current_player, AI):
             move = current_player.choose_move(engine.moves)
             input("Kliknij aby kontynuuować")
-        else:
-            pass
-        engine.performMove(move)
+        winner = engine.performMove(move)
+        if winner is not None:
+            print('{} won!'.format(winner))
+            sys.exit(0)
 
         print()
         print()
