@@ -3,12 +3,13 @@
 from game.engine import GameEngine
 from game.printer import StatePrinter
 from game.builder import BoardBuilder
-from game.hero import Hero, AI
 import sys
 
 def game_loop(engine):
     while(True):
         move = engine.activePlayerPicksMove()
+        if move is None:
+            continue
         winner = engine.performMove(move)
         if winner is not None:
             print('{} won!'.format(winner))

@@ -53,6 +53,7 @@ class GameEngine:
     def activePlayerPicksMove(self):
         player = self.active_player
         self.statePrinter.printState(self.state)
+        move = None
 
         if isinstance(player, Hero):
             try:
