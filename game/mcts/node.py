@@ -1,3 +1,6 @@
+from random import choice
+
+
 class Node:
     def __init__(self, parent=None, move=None, state=None):
         # None for root node
@@ -17,3 +20,9 @@ class Node:
         assert result in [0, 1]
         self.visits += 1
         self.wins += result
+
+    def has_childs(self):
+        return bool(self.child_nodes)
+
+    def random_child(self):
+        return choice(self.child_nodes)

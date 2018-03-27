@@ -1,1 +1,1 @@
-from algorithm import MonteCarloTreeSearch
+from .algorithm import MonteCarloTreeSearch
