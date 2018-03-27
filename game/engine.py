@@ -1,6 +1,7 @@
 from game.move import (PlayCard, MinionVsHero, MinionVsMinion, FinishTurn,
                        PlayMinionCard, PlayAbilityCard)
 from game.hero import Hero, AI
+from game.mcts.algorithm import MonteCarloTreeSearch
 
 class State:
     def __init__(self, board, moves=None):
