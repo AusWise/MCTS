@@ -62,7 +62,6 @@ class Board:
         return player.health <= 0
 
     def winner(self):
-        import ipdb; ipdb.set_trace()
         players = list(self._panels)
         losers = [self._has_lost(p) for p in players]
         if all(losers):
