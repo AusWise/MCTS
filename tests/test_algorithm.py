@@ -17,3 +17,11 @@ class TestMonteCarloTreeSearch(unittest.TestCase):
     def test_expand_newNodeAssigned(self):
         self.mcts.expand(node=self.mcts.root, state=4)
         self.assertEquals(len(self.mcts.root.child_nodes), 1)
+
+    def test_backpropagate(self):
+        self.mcts.root.visits = 3
+        child = Node(parent=self.mcts.root)
+        self.mcts.root.child_nodes = [child]
+        self.mcts.backpropagate(child, 1)
+        self.assertEqual(self.mcts.root.visits, 4)
+        self.assertEqual(self.mcts.root.wins, 1)

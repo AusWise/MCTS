@@ -15,3 +15,9 @@ class MonteCarloTreeSearch:
         # is move required? check later
         new_node = Node(parent=node, state=state)
         node.child_nodes.append(new_node)
+
+    def backpropagate(self, node, result):
+        _node = node
+        while _node is not None:
+            _node.update(result=result)
+            _node = _node.parent
