@@ -51,19 +51,19 @@ class GameEngine:
                 self.nextMove()
 
     def activePlayerPicksMove(self):
-        player = self.active_player
+        player = self.state.active_player
         self.statePrinter.printState(self.state)
         move = None
 
         if isinstance(player, Hero):
             try:
                 moveNo = int(input('Ktory ruch wybierasz: '))
-                move = self.moves[moveNo]
+                move = self.state.moves[moveNo]
                 self.statePrinter._printSeparator('*')
             except (IndexError, ValueError):
                 print('Niepoprawny ruch, spróbuj ponownie.')
         elif isinstance(player, AI):
-            move = player.choose_move(self.moves)
+            move = player.choose_move(self.state.moves)
 
         return move
 
@@ -81,37 +81,21 @@ class GameEngine:
 
         return moves
 
-    @property
-    def active_player(self):
-        return self.state.active_player
-
-    @property
-    def enemy(self):
-        return self.state.enemy
-
-    @property
-    def active_player_panel(self):
-        return self.board.panels[self.active_player]
-
-    @property
-    def enemy_panel(self):
-        return self.board.panels[self.enemy]
-
     def _generateMinionCardMoves(self):
         moves = []
 
-        for card in self.active_player.hand_minions:
-            if self.active_player.has_enough_mana(card.cost):
+        for card in self.state.active_player.hand_minions:
+            if self.state.active_player.has_enough_mana(card.cost):
                 moves.append(PlayMinionCard(card))
 
         return moves
 
     def _generateAbilityCardMoves(self):
         moves = []
-        enemy = self.enemy
+        enemy = self.state.enemy
 
-        for card in self.active_player.hand_abilities:
-            if self.active_player.has_enough_mana(card.cost):
+        for card in self.state.active_player.hand_abilities:
+            if self.state.active_player.has_enough_mana(card.cost):
                 moves.append(PlayAbilityCard(card, enemy))
 
         return moves
@@ -119,21 +103,17 @@ class GameEngine:
     def _generateMinionVsMinionMoves(self):
         moves = []
 
-        for heroMinion in self.active_player_panel.minions:
-            for enemyMinion in self.enemy_panel.minions:
+        for heroMinion in self.state.active_player_panel.minions:
+            for enemyMinion in self.state.enemy_panel.minions:
                 moves.append(MinionVsMinion(heroMinion, enemyMinion))
 
         return moves
 
     def _generateMinionVsHeroMoves(self):
         moves = []
-        enemy = self.enemy
+        enemy = self.state.enemy
 
-        for minion in self.active_player_panel.minions:
+        for minion in self.state.active_player_panel.minions:
             moves.append(MinionVsHero(minion, enemy))
 
         return moves
-
-    @property
-    def moves(self):
-        return self.state.moves
