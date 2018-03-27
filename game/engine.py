@@ -1,4 +1,6 @@
-from game.move import PlayCard, MinionVsHero, MinionVsMinion, FinishTurn, PlayMinionCard, PlayAbilityCard
+from game.move import (PlayCard, MinionVsHero, MinionVsMinion, FinishTurn,
+                       PlayMinionCard, PlayAbilityCard)
+from game.hero import Hero, AI
 
 class State:
     def __init__(self, board, moves=None):
@@ -25,10 +27,12 @@ class State:
     def enemy_panel(self):
         return self.board.panels[self.enemy]
 
+
 class GameEngine:
-    def __init__(self, board):
+    def __init__(self, board, statePrinter):
         self.state = State(board)
         self.board = board
+        self.statePrinter = statePrinter
         self.nextMove()
 
     def nextTurn(self):
@@ -45,6 +49,22 @@ class GameEngine:
                 return winner
             else:
                 self.nextMove()
+
+    def activePlayerPicksMove(self):
+        player = self.active_player
+        self.statePrinter.printState(self.state)
+
+        if isinstance(player, Hero):
+            try:
+                moveNo = int(input('Ktory ruch wybierasz: '))
+                move = self.moves[moveNo]
+                self.statePrinter._printSeparator('*')
+            except (IndexError, ValueError):
+                print('Niepoprawny ruch, spróbuj ponownie.')
+        elif isinstance(player, AI):
+            move = player.choose_move(self.moves)
+
+        return move
 
     def nextMove(self):
         self.state.moves = self.generateMoves()
