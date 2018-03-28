@@ -28,13 +28,16 @@ class MonteCarloTreeSearch:
             _node = _node.parent
 
     def simulate(self, node):
-        state_copy = deepcopy(self.engine.state)
-        player = self.engine.state.active_player
+        state_copy = deepcopy(self.engine.board)
+        initial_state = self.engine.board
+        self.engine.board = state_copy
+        player = initial_state.active_player
         winner = None
         while winner is None:
-            move = choice(self.engine.state.moves)
+            move = choice(self.engine.moves)
+            self.engine.moves.remove(move)
             winner = self.engine.performMove(move)
-        self.engine.state = state_copy
+        self.engine.board = initial_state
         return 1 if winner is player else 0
 
     def run(self):
@@ -42,7 +45,7 @@ class MonteCarloTreeSearch:
         i = 0
         while time.time() - start_t < self.time_limit:
             node = self.select()
-            self.expand(node=node, state=self.engine.state)
+            self.expand(node=node, state=self.engine.board)
             result = self.simulate(node=node)
             self.backpropagate(node=node, result=result)
         print('MCTS run {} times'.format(i))
