@@ -30,7 +30,8 @@ class BaseHero(Character):
         return list(filter(lambda c: c.type == CardType.ABILITY, self.hand))
 
     def pick(self, n=1):
-        for i in range(n):
+        cards_numb = min(len(self.deck), n)
+        for i in range(cards_numb):
             self.hand.add(self.deck.pop())
 
     def burn_mana(self, points):
