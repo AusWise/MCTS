@@ -61,9 +61,6 @@ class MinionVsHero(Move):
         self.hero.lose_health(self.minion.attack)
         self.minion.used = True
 
-        if not self.hero.is_alive():
-            return None
-
         return board
 
     def __str__(self):

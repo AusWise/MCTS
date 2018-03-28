@@ -35,7 +35,6 @@ class MonteCarloTreeSearch:
         winner = None
         while winner is None:
             move = choice(self.engine.moves)
-            self.engine.moves.remove(move)
             winner = self.engine.performMove(move)
         self.engine.board = initial_state
         return 1 if winner is player else 0

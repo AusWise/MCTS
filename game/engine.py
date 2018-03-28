@@ -19,7 +19,6 @@ class GameEngine:
         if isinstance(move, FinishTurn):
             self.nextTurn()
         else:
-            #self.board.moves.remove(move)
             self.board = move(self.board)
             winner = self.board.winner()
             if winner is not None:
