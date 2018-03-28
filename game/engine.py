@@ -19,6 +19,7 @@ class GameEngine:
         if isinstance(move, FinishTurn):
             self.nextTurn()
         else:
+            #self.board.moves.remove(move)
             self.board = move(self.board)
             winner = self.board.winner()
             if winner is not None:
@@ -29,6 +30,7 @@ class GameEngine:
     def activePlayerPicksMove(self):
         player = self.board.active_player
         self.statePrinter.printState(self.board)
+        self.statePrinter.printMoves(self.moves)
         move = None
 
         if isinstance(player, Hero):

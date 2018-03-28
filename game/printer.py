@@ -2,15 +2,15 @@ class StatePrinter:
     def __init__(self):
         self.separator_quanitity = 60
 
-    def printState(self, state):
-        top_player = state.board.enemy
-        top_panel = state.board.enemy_panel
-        bottom_player = state.board.active_player
-        bottom_panel = state.board.active_player_panel
+    def printState(self, board):
+        top_player = board.enemy
+        top_panel = board.enemy_panel
+        bottom_player = board.active_player
+        bottom_panel = board.active_player_panel
 
         self._printSeparator('*')
-        self.printTurn(state.round)
-        self.printTurnOwn(state.board.active_player)
+        self.printTurn(round)
+        self.printTurnOwn(board.active_player)
 
         self.printHand(top_player)
         self.printHero(top_player)
@@ -23,7 +23,6 @@ class StatePrinter:
         self.printHand(bottom_player)
 
         self._printSeparator('*')
-        self.printMoves(state.moves)
 
     def printTurn(self, _round):
         print('Round: ' + str(_round))
