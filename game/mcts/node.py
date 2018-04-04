@@ -26,7 +26,11 @@ class Node:
     def UCB(self, C):
         if self.parent is None:
             raise ValueError('No UCB value for root node!')
-        conf_interval = math.sqrt(math.log(self.parent.visits) / self.visits)
+        if self.visits > 0:
+            conf_interval = math.sqrt(math.log(self.parent.visits) / self.visits)
+        else:
+            # explore unvisited nodes
+            conf_interval = 100
 
         return self.value + C * conf_interval
 

@@ -19,7 +19,7 @@ class MonteCarloTreeSearch:
         while node.has_childs():
             if random.random() > self.exploration_threeshold:
                 break
-            node = node.random_child()
+            node = self.select_UCB(node)
         return node
 
     def select_UCB(self, node):
