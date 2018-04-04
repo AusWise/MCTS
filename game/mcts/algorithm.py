@@ -3,6 +3,7 @@ from copy import deepcopy
 import time
 from random import choice
 import random
+import operator
 
 
 class MonteCarloTreeSearch:
@@ -12,6 +13,7 @@ class MonteCarloTreeSearch:
         self.time_limit = 3
         self.exploration_threeshold = 0.90
         self.max_simulation_depth = 200
+        self.C = 1
 
     def select_random_leaf(self, node):
         while node.has_childs():
@@ -19,6 +21,9 @@ class MonteCarloTreeSearch:
                 break
             node = node.random_child()
         return node
+
+    def select_UCB(self, node):
+        return max(node.child_nodes, key=lambda n: n.UCB(C=self.C))
 
     def expand(self, node, state):
         # is move required? check later
