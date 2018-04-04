@@ -2,17 +2,21 @@ from .node import Node
 from copy import deepcopy
 import time
 from random import choice
+import random
 
 
 class MonteCarloTreeSearch:
     def __init__(self, root_state, engine):
         self.root = Node(state=root_state)
         self.engine = engine
-        self.time_limit = 3000
+        self.time_limit = 3
+        self.exploration_threeshold = 0.98
 
     def select(self):
         node = self.root
         while node.has_childs():
+            if random.random() > self.exploration_threeshold:
+                break
             node = node.random_child()
         return node
 
@@ -37,7 +41,7 @@ class MonteCarloTreeSearch:
             move = choice(self.engine.moves)
             winner = self.engine.performMove(move)
         self.engine.board = initial_state
-        return 1 if winner is player else 0
+        return 1 if winner.name == player.name else 0
 
     def run(self):
         start_t = time.time()
