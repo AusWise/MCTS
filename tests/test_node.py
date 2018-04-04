@@ -23,3 +23,13 @@ class TestNode(unittest.TestCase):
         self.node.child_nodes = [1, 2, 3]
         node = self.node.random_child()
         self.assertIsInstance(node, int)
+
+    def test_getWinsRatio_returnFloat(self):
+        self.node.visits = 4
+        self.node.wins = 2
+        self.assertEquals(self.node.wins_ratio, 0.5)
+
+    def test_getWinsRatioWhenNoVisits_returnsZero(self):
+        self.node.visits = 0
+        self.node.wins = 0
+        self.assertEquals(self.node.wins_ratio, 0.0)

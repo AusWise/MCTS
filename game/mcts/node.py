@@ -13,6 +13,10 @@ class Node:
         self.wins = 0
         self.child_nodes = []
 
+    @property
+    def wins_ratio(self):
+        return self.wins / self.visits if self.visits > 0 else 0.0
+
     def add_child(self, node):
         self.child_nodes.append(node)
 
