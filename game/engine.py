@@ -10,6 +10,7 @@ class GameEngine:
         self.moves = []
         self.statePrinter = statePrinter
         self.nextMove()
+        self.mcts = MonteCarloTreeSearch(board, self)
 
     def nextTurn(self):
         self.board._nextPlayer()

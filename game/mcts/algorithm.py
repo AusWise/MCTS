@@ -13,8 +13,7 @@ class MonteCarloTreeSearch:
         self.exploration_threeshold = 0.90
         self.max_simulation_depth = 200
 
-    def select(self):
-        node = self.root
+    def select_random_leaf(self, node):
         while node.has_childs():
             if random.random() > self.exploration_threeshold:
                 break
@@ -49,9 +48,11 @@ class MonteCarloTreeSearch:
     def run(self):
         start_t = time.time()
         i = 0
+        print('Running MCTS algorithm')
         while time.time() - start_t < self.time_limit:
-            node = self.select()
+            node = self.select_random_leaf(self.root)
             self.expand(node=node, state=self.engine.board)
             result = self.simulate(node=node)
             self.backpropagate(node=node, result=result)
-        print('MCTS run {} times'.format(i))
+            i = i + 1
+        print('MCTS: {} iterations'.format(i))
