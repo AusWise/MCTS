@@ -10,7 +10,8 @@ class MonteCarloTreeSearch:
         self.root = Node(state=root_state)
         self.engine = engine
         self.time_limit = 3
-        self.exploration_threeshold = 0.98
+        self.exploration_threeshold = 0.90
+        self.max_simulation_depth = 200
 
     def select(self):
         node = self.root
@@ -37,11 +38,13 @@ class MonteCarloTreeSearch:
         self.engine.board = state_copy
         player = initial_state.active_player
         winner = None
-        while winner is None:
+        depth = 0
+        while winner is None and depth < self.max_simulation_depth:
             move = choice(self.engine.moves)
             winner = self.engine.performMove(move)
+            depth += 1
         self.engine.board = initial_state
-        return 1 if winner.name == player.name else 0
+        return 1 if winner is not None and winner.name == player.name else 0
 
     def run(self):
         start_t = time.time()
