@@ -1,3 +1,4 @@
+import math
 from random import choice
 
 
@@ -16,6 +17,18 @@ class Node:
     @property
     def wins_ratio(self):
         return self.wins / self.visits if self.visits > 0 else 0.0
+
+    @property
+    def value(self):
+        return self.wins_ratio
+
+    # Upper Confidence Bounds
+    def UCB(self, C):
+        if self.parent is None:
+            raise ValueError('No UCB value for root node!')
+        conf_interval = math.sqrt(math.log(self.parent.visits) / self.visits)
+
+        return self.value + C * conf_interval
 
     def add_child(self, node):
         self.child_nodes.append(node)

@@ -33,3 +33,12 @@ class TestNode(unittest.TestCase):
         self.node.visits = 0
         self.node.wins = 0
         self.assertEquals(self.node.wins_ratio, 0.0)
+
+    def test_UCB_returnedCorrectValue(self):
+        n = Node(parent=self.node)
+        n.visits = 1
+        n.wins = 1
+        self.node.visits = 2
+
+        res = n.UCB(C=1)
+        self.assertAlmostEqual(res, 1.83255, places=5)
