@@ -83,12 +83,13 @@ class PlayersPanel:
                       self.cards)
 
     def play_card(self, card):
-        self.hero.hand.remove(card)
+        self.hero.remove_card(card)
         self.cards.add(card)
         self.hero.burn_mana(card.cost)
 
     def remove_card(self, card):
-        self.cards.remove(card)
+        if card in self.cards:
+            self.cards.remove(card)
 
     def enable_cards(self):
         for card in self.cards:

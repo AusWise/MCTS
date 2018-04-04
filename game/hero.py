@@ -34,6 +34,10 @@ class BaseHero(Character):
         for i in range(cards_numb):
             self.hand.add(self.deck.pop())
 
+    def remove_card(self, card):
+        if card in self.hand:
+            self.hand.remove(card)
+
     def burn_mana(self, points):
         self.mana.points -= points
 

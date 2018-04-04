@@ -25,7 +25,7 @@ class PlayAbilityCard(Move):
     def __call__(self, board):
         # implement attack
         #board.active_panel.remove_card(self.card)
-        board.active_player.hand.remove(self.card)
+        board.active_player.remove_card(self.card)
         return board
 
     def __str__(self):
