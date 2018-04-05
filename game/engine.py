@@ -7,10 +7,13 @@ from game.mcts.algorithm import MonteCarloTreeSearch
 class GameEngine:
     def __init__(self, board, statePrinter):
         self.board = board
-        self.moves = []
         self.statePrinter = statePrinter
         self.nextMove()
         self.mcts = MonteCarloTreeSearch(board, self)
+
+    @property
+    def moves(self):
+        return self.board.moves
 
     def nextTurn(self):
         self.board._nextPlayer()
@@ -46,7 +49,7 @@ class GameEngine:
         return move
 
     def nextMove(self):
-        self.moves = self.generateMoves()
+        self.board.moves = self.generateMoves()
 
     def generateMoves(self):
         moves = []

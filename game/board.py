@@ -1,9 +1,9 @@
 from .card import CardType
-import itertools
 
 
 class Board:
     def __init__(self, hero1, hero2):
+        self.moves = []
         self._panels = {
             hero1: PlayersPanel(hero1, cards_numb=3),
             hero2: PlayersPanel(hero2, cards_numb=4)

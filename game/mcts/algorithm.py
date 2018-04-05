@@ -2,8 +2,6 @@ from .node import Node
 from copy import deepcopy
 import time
 from random import choice
-import random
-import operator
 
 
 class MonteCarloTreeSearch:
@@ -11,14 +9,11 @@ class MonteCarloTreeSearch:
         self.root = Node(state=root_state)
         self.engine = engine
         self.time_limit = 3
-        self.exploration_threeshold = 0.90
         self.max_simulation_depth = 200
         self.C = 1
 
-    def select_random_leaf(self, node):
+    def select_UCB_leaf(self, node):
         while node.has_childs():
-            if random.random() > self.exploration_threeshold:
-                break
             node = self.select_UCB(node)
         return node
 
@@ -26,9 +21,14 @@ class MonteCarloTreeSearch:
         return max(node.child_nodes, key=lambda n: n.UCB(C=self.C))
 
     def expand(self, node, state):
-        # is move required? check later
-        new_node = Node(parent=node, state=state)
-        node.child_nodes.append(new_node)
+        board = self.engine.board
+        moves = self.engine.moves
+        for move in moves:
+            _board = deepcopy(board)
+            self.engine.board = board
+            self.engine.performMove(move)
+            _new_node = Node(parent=node, move=move, state=_board)
+            node.child_nodes.append(_new_node)
 
     def backpropagate(self, node, result):
         _node = node
@@ -55,7 +55,7 @@ class MonteCarloTreeSearch:
         i = 0
         print('Running MCTS algorithm')
         while time.time() - start_t < self.time_limit:
-            node = self.select_random_leaf(self.root)
+            node = self.select_UCB_leaf(self.root)
             self.expand(node=node, state=self.engine.board)
             result = self.simulate(node=node)
             self.backpropagate(node=node, result=result)
